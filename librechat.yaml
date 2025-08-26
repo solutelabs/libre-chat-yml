@@ -2135,8 +2135,3 @@ memory:
   agent:
     provider: "openAI"
     model: "gpt-4"
-
-ocr:
-  mistralModel: "mistral-ocr-latest"
-  baseURL: "https://api.mistral.ai/v1"
-  strategy: "mistral_ocr"
