@@ -1,0 +1,69 @@
+version: 1.2.8
+ 
+cache: true
+ 
+interface:
+  # MCP Servers UI configuration
+  mcpServers:
+    placeholder: 'MCP Servers'
+  modelSelect: true
+  parameters: true
+  sidePanel: true
+  presets: true
+  prompts: true
+  bookmarks: true
+  multiConvo: true
+  agents: true
+  customWelcome: "Hey {{user.name}}! Welcome to SoluteLabs LibreChat Enterprise Version"
+  runCode: true
+  webSearch: true
+  fileSearch: true
+  fileCitations: true
+  
+registration:
+  socialLogins: ["google"]
+  allowedDomains: 
+    - "solutelabs.com"
+ 
+endpoints:
+  agents:
+    recursionLimit: 50
+    maxRecursionLimit: 100
+    disableBuilder: false
+    # (optional) Agent Capabilities available to all users. Omit the ones you wish to exclude. Defaults to list below.
+    # capabilities: ["execute_code", "file_search", "actions", "tools", "artifacts", "ocr", "chain", "web_search"]
+    # (optional) File citation configuration for file_search capability
+    maxCitations: 30          # Maximum total citations in responses (1-50)
+    maxCitationsPerFile: 7    # Maximum citations from each file (1-10)
+    minRelevanceScore: 0.45   # Minimum relevance score threshold (0.0-1.0)
+  
+  custom:
+ 
+    #cohere
+    - name: "cohere"
+      apiKey: "${COHERE_API_KEY}"
+      baseURL: "https://api.cohere.ai/v1"
+      models:
+        default: ["command-r","command-r-plus","command-light","command-light-nightly","command","command-nightly"]
+        fetch: false
+      modelDisplayLabel: "cohere"
+      titleModel: "command"
+      dropParams: ["stop", "user", "frequency_penalty", "presence_penalty", "temperature", "top_p"]
+ 
+    # Fireworks
+    - name: "Fireworks"
+      apiKey: "${FIREWORKS_API_KEY}"
+      baseURL: "https://api.fireworks.ai/inference/v1"
+      models:
+        default: [
+          "accounts/fireworks/models/mixtral-8x7b-instruct",
+          ]
+        fetch: true
+      titleConvo: true
+      titleModel: "accounts/fireworks/models/llama-v2-7b-chat"
+      summarize: false
+      summaryModel: "accounts/fireworks/models/llama-v2-7b-chat"
+      forcePrompt: false
+      modelDisplayLabel: "Fireworks"
+      dropParams: ["user"]
+
