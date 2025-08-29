@@ -5,7 +5,10 @@ cache: true
 interface:
   # MCP Servers UI configuration
   mcpServers:
-    placeholder: 'MCP Servers'
+  internal-tools:
+    command: npx
+    args: ["-y", "internal-mcp-server"]
+    chatMenu: true  # Only available in agent builder
   modelSelect: true
   parameters: true
   sidePanel: true
@@ -14,7 +17,7 @@ interface:
   bookmarks: true
   multiConvo: true
   agents: true
-  customWelcome: "Hey {{user.name}}! Welcome to SoluteLabs LibreChat Enterprise Version"
+  customWelcome: "Hey {{user.name}}! Welcome to SoluteLabs GreatWrk Enterprise Version"
   runCode: true
   webSearch: true
   fileSearch: true
@@ -24,6 +27,20 @@ registration:
   socialLogins: ["google"]
   allowedDomains: 
     - "solutelabs.com"
+
+memory:
+  disabled: false
+  validKeys: ["user_preferences", "conversation_context", "personal_info"]
+  tokenLimit: 2000
+  personalize: true
+  messageWindowSize: 5
+  agent:
+    provider: "openAI"
+    model: "gpt-5"
+    instructions: "You are a helpful assistant that remembers user preferences and context."
+    model_parameters:
+      temperature: 0.7
+      max_tokens: 1000
  
 endpoints:
   agents:
@@ -41,29 +58,26 @@ endpoints:
  
     #cohere
     - name: "cohere"
-      apiKey: "${COHERE_API_KEY}"
-      baseURL: "https://api.cohere.ai/v1"
-      models:
-        default: ["command-r","command-r-plus","command-light","command-light-nightly","command","command-nightly"]
-        fetch: false
-      modelDisplayLabel: "cohere"
-      titleModel: "command"
-      dropParams: ["stop", "user", "frequency_penalty", "presence_penalty", "temperature", "top_p"]
- 
-    # Fireworks
-    - name: "Fireworks"
-      apiKey: "${FIREWORKS_API_KEY}"
-      baseURL: "https://api.fireworks.ai/inference/v1"
-      models:
-        default: [
-          "accounts/fireworks/models/mixtral-8x7b-instruct",
-          ]
-        fetch: true
-      titleConvo: true
-      titleModel: "accounts/fireworks/models/llama-v2-7b-chat"
-      summarize: false
-      summaryModel: "accounts/fireworks/models/llama-v2-7b-chat"
-      forcePrompt: false
-      modelDisplayLabel: "Fireworks"
-      dropParams: ["user"]
+        apiKey: "${COHERE_API_KEY}"
+        baseURL: "https://api.cohere.ai/v1"
+        models:
+          default: ["command-r","command-r-plus","command-light","command-light-nightly","command","command-nightly"]
+          fetch: true
+        modelDisplayLabel: "cohere"
+        titleModel: "command"
+        dropParams: ["stop", "user", "frequency_penalty", "presence_penalty", "temperature", "top_p"]
+
+        # Example using Mistral AI API
+    - name: "Mistral"
+        apiKey: "${MISTRAL_API_KEY}"
+        baseURL: "https://api.mistral.ai/v1"
+        models: 
+          default: ["mistral-tiny", "mistral-small", "mistral-medium", "mistral-large-latest"]
+          titleConvo: true
+        titleModel: "mistral-tiny" 
+        modelDisplayLabel: "Mistral"
+        # addParams:
+        #   safe_prompt: true # Mistral specific value for moderating messages
+        # NOTE: For Mistral, it is necessary to drop the following parameters or you will encounter a 422 Error:
+        dropParams: ["stop", "user", "frequency_penalty", "presence_penalty"]      
 
